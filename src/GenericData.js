@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactDataGrid from 'react-data-grid';
+import decamelize from 'decamelize';
+import * as check from './checkTable';
 
 const GenericData = ({data}) => {
   if (data === null) return <NullFormat/>;
@@ -24,37 +27,61 @@ const GenericData = ({data}) => {
   }
 };
 
+const KeyValueFormat = ({
+  data = {}
+}) => (
+  <ul>{
+    Object.entries(data).map(
+      ([key, value]) => (
+        <li key={key}>
+          <label>{key}</label>
+          {': '}
+          <GenericData data={value}/>
+        </li>
+      )
+    )
+  }</ul>
+);
+
 const ObjectFormat = ({
   data = {}
 }) => {
-  return (
-    <ul>{
-      Object.entries(data).map(
-        ([key, value]) => (
-          <li key={key}>
-            <label>{key}</label>
-            {': '}
-            <GenericData data={value}/>
-          </li>
-        )
-      )
-    }</ul>
-  );
+  let tableData = check.checkObjectTable(data);
+  if (tableData) return <div>{"table"}</div>;
+  return <KeyValueFormat data={data}/>;
 };
+
+const ListFormat = ({
+  data = {}
+}) => (
+  <ul>{
+    data.map(
+      (value, index) => (
+        <li key={index}>
+          <GenericData data={value}/>
+        </li>
+      )
+    )
+  }</ul>
+);
 
 const ArrayFormat = ({
   data = {}
 }) => {
+  let tableData = check.checkObjectTable(data);
+  if (tableData) return <div>{"table"}</div>;
+  return <ListFormat data={data}/>;
+};
+
+export const TableFormat = ({
+  data = {}
+}) => {
+  // const columns = Object.keys(data).map(key => ({key, name: decamelize(key, ' ').toUppercase()}));
+  // checkObjectTable(data)
+  // const rows = [{id: 0, title: 'row1', count: 20}, {id: 1, title: 'row1', count: 40}, {id: 2, title: 'row1', count: 60}];
+
   return (
-    <ul>{
-      data.map(
-        (value, index) => (
-          <li key={index}>
-            <GenericData data={value}/>
-          </li>
-        )
-      )
-    }</ul>
+    <div/>
   );
 };
 
@@ -76,13 +103,16 @@ const StringFormat = ({
   );
 };
 
-const numberFormatter = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
+const integerFormatter = new Intl.NumberFormat('fr-FR', { useGrouping: false, minimumIntegerDigits: 1, minimumFractionDigits: 0 });
+
+const decimalFormatter = new Intl.NumberFormat('fr-FR', { useGrouping: false, minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 const NumberFormat = ({
   data = 0
 }) => {
   return (
     <span>
-      {numberFormatter.format(data)}
+      {Number.isInteger(data)? integerFormatter.format(data): decimalFormatter.format(data)}
     </span>
   );
 };
