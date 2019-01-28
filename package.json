@@ -48,6 +48,6 @@
   },
   "dependencies": {
     "decamelize": "2.0.0",
-    "react-data-grid": "5.0.5"
+    "react-table": "6.8.6"
   }
 }

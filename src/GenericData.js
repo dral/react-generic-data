@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDataGrid from 'react-data-grid';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 import decamelize from 'decamelize';
 import * as check from './checkTable';
 
@@ -77,38 +78,17 @@ const cellFormatter = ({value}) => {
   return GenericData({data: value});
 };
 
-export class Table extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columns: props.data.columns.map(key => ({key, name: decamelize(key, ' '), formatter: cellFormatter})),
-      rows: props.data.rows,
-    };
-    this.getRow = this.getRow.bind(this);
-  }
-
-  getRow(i) {
-    return this.state.rows[i];
-  }
-
-  render() {
-    let rowHeight = 35;
-    let headerRowHeight = rowHeight;
-    return (
-      <ReactDataGrid
-        columns={this.state.columns}
-        rowGetter={this.getRow}
-        rowsCount={this.state.rows.length}
-        enableCellSelect={true}
-        resizable
-        rowHeight={rowHeight}
-        headerRowHeight={headerRowHeight}
-        minHeight={this.state.rows.length * rowHeight + headerRowHeight}
-        rowKey={'index'}
-      />
-    );
-  }
-}
+const Table = ({data}) => {
+  let columns= data.columns.map(key => ({accessor: key, Header: decamelize(key, ' '), Cell: cellFormatter}));
+  return (
+    <ReactTable
+      columns={columns}
+      data={data.rows}
+      defaultPageSize={Math.min(10, data.rows.length)}
+      showPagination={false}
+    />
+  );
+};
 
 const newLine = /\n/;
 
