@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from 'react-dom';
-
 import { GenericData } from '../src';
 
 const myObject = {
@@ -20,10 +19,10 @@ text
     {a: 4, b: 8},
   ],
   objectTable: {
-    id1: {a: 1, b: 2, c: 3},
-    id2: {b: 4, c: 6},
-    id3: {a: 3, c: 9},
-    id4: {a: 4, b: 8},    
+    id1: {itemId: 1, soldQtty: 2, orderId: 3},
+    id2: {soldQtty: 4, orderId: 6},
+    id3: {itemId: 3, orderId: 9},
+    id4: {itemId: 4, soldQtty: 8},
   }
 };
 
@@ -32,13 +31,6 @@ const myMultilineString = `foo
 bar
 buz
 `;
-
-const table = [
-  {a: 1, b: 2, c: 3},
-  {b: 4, c: 6},
-  {a: 3, c: 9},
-  {a: 4, b: 8},
-];
 
 const App = () => (
   <div>
@@ -53,6 +45,15 @@ const App = () => (
     <GenericData data={myMultilineString}/>
     <h1>array</h1>
     <GenericData data={[1, 2, 3]}/>
+    <h1>tables</h1>
+    <p>raw data</p>
+    <GenericData data={JSON.stringify(myObject.arrayTable, null, 2)}/>
+    <p>output</p>
+    <GenericData data={myObject.arrayTable}/>
+    <p>raw data</p>
+    <GenericData data={JSON.stringify(myObject.objectTable, null, 2)}/>
+    <p>output</p>
+    <GenericData data={myObject.objectTable}/>
     <h1>integers</h1>
     <p><GenericData data={12345}/></p>
     <h1>decimal</h1>

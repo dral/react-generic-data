@@ -47,7 +47,7 @@ const ObjectFormat = ({
   data = {}
 }) => {
   let tableData = check.checkObjectTable(data);
-  if (tableData) return <div>{"table"}</div>;
+  if (tableData) return <Table data={tableData}/>;
   return <KeyValueFormat data={data}/>;
 };
 
@@ -68,22 +68,47 @@ const ListFormat = ({
 const ArrayFormat = ({
   data = {}
 }) => {
-  let tableData = check.checkObjectTable(data);
-  if (tableData) return <div>{"table"}</div>;
+  let tableData = check.checkArrayTable(data);
+  if (tableData) return <Table data={tableData}/>;
   return <ListFormat data={data}/>;
 };
 
-export const TableFormat = ({
-  data = {}
-}) => {
-  // const columns = Object.keys(data).map(key => ({key, name: decamelize(key, ' ').toUppercase()}));
-  // checkObjectTable(data)
-  // const rows = [{id: 0, title: 'row1', count: 20}, {id: 1, title: 'row1', count: 40}, {id: 2, title: 'row1', count: 60}];
-
-  return (
-    <div/>
-  );
+const cellFormatter = ({value}) => {
+  return GenericData({data: value});
 };
+
+export class Table extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      columns: props.data.columns.map(key => ({key, name: decamelize(key, ' '), formatter: cellFormatter})),
+      rows: props.data.rows,
+    };
+    this.getRow = this.getRow.bind(this);
+  }
+
+  getRow(i) {
+    return this.state.rows[i];
+  }
+
+  render() {
+    let rowHeight = 35;
+    let headerRowHeight = rowHeight;
+    return (
+      <ReactDataGrid
+        columns={this.state.columns}
+        rowGetter={this.getRow}
+        rowsCount={this.state.rows.length}
+        enableCellSelect={true}
+        resizable
+        rowHeight={rowHeight}
+        headerRowHeight={headerRowHeight}
+        minHeight={this.state.rows.length * rowHeight + headerRowHeight}
+        rowKey={'index'}
+      />
+    );
+  }
+}
 
 const newLine = /\n/;
 

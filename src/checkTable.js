@@ -30,7 +30,14 @@ export const checkArrayTable = (
     countSimilar++;
   }
 
-  if (countSimilar >= minSimilarColumns) return Object.keys(columns);
+  if (countSimilar >= minSimilarColumns) {
+    let result = {
+      columns: Object.keys(columns),
+      rows: data,
+    };
+
+    return result;
+  }
   return null;
 };
 
