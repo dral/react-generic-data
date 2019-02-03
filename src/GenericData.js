@@ -80,14 +80,17 @@ const cellFormatter = ({value}) => {
 
 const Table = ({data}) => {
   let columns= data.columns.map(key => ({accessor: key, Header: decamelize(key, ' '), Cell: cellFormatter}));
+  let defaultPageSize = 10;
+  let pageSize = Math.min(defaultPageSize, data.rows.length);
+  let showPagination = data.rows.length > defaultPageSize;
   return (
     <div>
       <ReactTable
         columns={columns}
         data={data.rows}
-        defaultPageSize={10}
+        defaultPageSize={pageSize}
         filterable={true}
-        showPagination={true}
+        showPagination={showPagination}
         className="-striped -highlight"
       />
       <br/>
