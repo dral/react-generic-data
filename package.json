@@ -1,6 +1,6 @@
 {
   "name": "react-generic-data",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React components to display a generic object",
   "main": "./distribution/index.js",
   "scripts": {
@@ -48,6 +48,6 @@
   },
   "dependencies": {
     "decamelize": "2.0.0",
-    "react-table": "6.8.6"
+    "react-table": "6.9.0"
   }
 }

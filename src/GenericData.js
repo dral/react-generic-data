@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+import './react-table.css';
 import decamelize from 'decamelize';
 import * as check from './checkTable';
 
@@ -81,12 +81,17 @@ const cellFormatter = ({value}) => {
 const Table = ({data}) => {
   let columns= data.columns.map(key => ({accessor: key, Header: decamelize(key, ' '), Cell: cellFormatter}));
   return (
-    <ReactTable
-      columns={columns}
-      data={data.rows}
-      defaultPageSize={Math.min(10, data.rows.length)}
-      showPagination={false}
-    />
+    <div>
+      <ReactTable
+        columns={columns}
+        data={data.rows}
+        defaultPageSize={10}
+        filterable={true}
+        showPagination={true}
+        className="-striped -highlight"
+      />
+      <br/>
+    </div>
   );
 };
 
