@@ -2,6 +2,8 @@ import React from 'react';
 import ReactTable from 'react-table';
 import './react-table.css';
 import decamelize from 'decamelize';
+import {parse} from 'json2csv';
+import copy from 'copy-to-clipboard';
 import * as check from './checkTable';
 
 const GenericData = ({data}) => {
@@ -78,6 +80,38 @@ const cellFormatter = ({value}) => {
   return GenericData({data: value});
 };
 
+const csvOptions = {
+  flatten:true,
+  flattenSeparator: '|',
+  delimiter: ';',
+  eol: '\n',
+  excelStrings: false,
+  header:true,
+};
+
+const ExportCSV = ({
+  data,
+  onCopy = () => {},
+  onFail = () => {},
+}) => {
+
+  const csvCopy = () => {
+    try {
+      const csv = parse(data.rows, csvOptions);
+      copy(csv);
+      onCopy(csv);
+    } catch (error) {
+      onFail(error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={() => csvCopy(data.rows)}>copy CSV to clipboard</button>
+    </div>
+  );
+};
+
 const Table = ({data}) => {
   let columns= data.columns.map(key => ({accessor: key, Header: decamelize(key, ' '), Cell: cellFormatter}));
   let defaultPageSize = 10;
@@ -85,6 +119,7 @@ const Table = ({data}) => {
   let showPagination = data.rows.length > defaultPageSize;
   return (
     <div>
+      <ExportCSV data={data}/>
       <ReactTable
         columns={columns}
         data={data.rows}
