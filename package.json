@@ -1,6 +1,6 @@
 {
   "name": "react-generic-data",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "React components to display a generic object",
   "main": "./distribution/index.js",
   "scripts": {
@@ -49,6 +49,7 @@
   "dependencies": {
     "copy-to-clipboard": "3.0.8",
     "decamelize": "2.0.0",
+    "downloadjs": "^1.4.7",
     "json2csv": "4.3.3",
     "react-table": "6.9.0"
   }

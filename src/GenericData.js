@@ -5,6 +5,7 @@ import decamelize from 'decamelize';
 import {parse} from 'json2csv';
 import copy from 'copy-to-clipboard';
 import * as check from './checkTable';
+import download from 'downloadjs';
 
 const GenericData = ({data}) => {
   if (data === null) return <NullFormat/>;
@@ -112,14 +113,39 @@ const ExportCSV = ({
   );
 };
 
-const Table = ({data}) => {
+const DownloadCSV = ({
+  data,
+  filename = 'data.csv',
+  onCopy = () => {},
+  onFail = () => {},
+}) => {
+
+  const csvDownload = () => {
+    try {
+      const csv = parse(data.rows, csvOptions);
+      download(csv, filename, 'text/csv');
+      onCopy(csv);
+    } catch (error) {
+      onFail(error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={() => csvDownload(data.rows)}>Download CSV</button>
+    </div>
+  );
+};
+
+
+export const Table = ({data}) => {
   let columns= data.columns.map(key => ({accessor: key, Header: decamelize(key, ' '), Cell: cellFormatter}));
   let defaultPageSize = 10;
   let pageSize = Math.min(defaultPageSize, data.rows.length);
   let showPagination = data.rows.length > defaultPageSize;
   return (
     <div>
-      <ExportCSV data={data}/>
+      <DownloadCSV data={data}/>
       <ReactTable
         columns={columns}
         data={data.rows}

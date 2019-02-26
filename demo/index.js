@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { GenericData } from '../src';
+import { GenericData, Table, checkArrayTable, checkObjectTable } from '../src';
 
 const myObject = {
   a: 42,
@@ -13,6 +13,14 @@ big
 text
 ` },
   arrayTable: [
+    {a: 1, b: 2, c: 3},
+    {b: 4, c: 6},
+    {a: 3, c: 9},
+    {a: 4, b: 8},
+    {a: 1, b: 2, c: 3},
+    {b: 4, c: 6},
+    {a: 3, c: 9},
+    {a: 4, b: 8},
     {a: 1, b: 2, c: 3},
     {b: 4, c: 6},
     {a: 3, c: 9},
@@ -32,8 +40,11 @@ bar
 buz
 `;
 
+let tableData = checkObjectTable(myObject.objectTable);
+
 const App = () => (
   <div>
+    <Table data={tableData}/>
     <h1>object</h1>
     <p>raw data</p>
     <GenericData data={JSON.stringify(myObject, null, 2)}/>

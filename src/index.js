@@ -1,2 +1,2 @@
-export {default as GenericData} from './GenericData';
+export {default as GenericData, Table} from './GenericData';
 export {checkArrayTable, checkObjectTable} from './checkTable';
